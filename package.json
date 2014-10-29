@@ -1,0 +1,22 @@
+{
+  "name": "nevernote",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shgtkshruch/nevernote.git"
+  },
+  "author": "shgtkshruch",
+  "license": "mit",
+  "bugs": {
+    "url": "https://github.com/shgtkshruch/nevernote/issues"
+  },
+  "homepage": "https://github.com/shgtkshruch/nevernote",
+  "dependencies": {
+    "evernote": "^1.25.3"
+  }
+}
