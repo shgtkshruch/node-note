@@ -4,12 +4,12 @@ var assert = require('assert');
 describe('Evernote', function () {
   var createdNote;
   var options = {
-    title: 'Test note',
+    title: new Date().getTime(),
     body: 'Here is the Evernote logo',
-    file: './test/enlogo.png'
+    file: './test/test.png'
   }
 
-  describe('create new note', function () {
+  describe('createNote', function () {
     before(function (done) {
       Evernote.createNote(options, function (note) {
         createdNote = note;
@@ -17,12 +17,12 @@ describe('Evernote', function () {
       });
     });
 
-    it('createaNote should create note', function () {
+    it('should create new note.', function () {
       assert.deepEqual(createdNote.title, options.title);
     });
   });
 
-  describe('delete note', function () {
+  describe('deleteNote', function () {
     var deletedNote;
 
     before(function (done) {
@@ -37,7 +37,7 @@ describe('Evernote', function () {
       });
     });
 
-    it('should delete note', function () {
+    it('should delete note.', function () {
       assert.deepEqual(createdNote.guid, deletedNote.guid);
       assert.deepEqual(deletedNote.active, false);
     });
