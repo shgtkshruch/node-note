@@ -1,18 +1,25 @@
-var Evernote = require('../index');
+var config = require('../config.json');
+var nevernote = require('../index');
 var path = require('path');
 var assert = require('assert');
 
 describe('Evernote', function () {
+  var evernote;
   var createdNote;
-  var options = {
-    title: new Date().getTime(),
-    body: 'Here is the Evernote logo',
-    file: './test/test.png'
-  }
+
+  before(function () {
+    evernote = new nevernote(config.develop.token);
+  });
 
   describe('createNote', function () {
+    var options = {
+      title: new Date().getTime(),
+      body: 'Here is the Evernote logo',
+      file: './test/test.png'
+    }
+
     before(function (done) {
-      Evernote.createNote(options, function (note) {
+      evernote.createNote(options, function (note) {
         createdNote = note;
         done();
       });
@@ -33,7 +40,7 @@ describe('Evernote', function () {
         guid: createdNote.guid
       }
 
-      Evernote.deleteNote(options, function (note) {
+      evernote.deleteNote(options, function (note) {
         deletedNote = note;
         done();
       });
