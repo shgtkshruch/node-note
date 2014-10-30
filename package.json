@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/shgtkshruch/nevernote",
   "dependencies": {
-    "evernote": "^1.25.3"
+    "evernote": "^1.25.3",
+    "mime": "^1.2.11"
   }
 }
