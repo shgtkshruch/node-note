@@ -70,6 +70,11 @@ module.exports = {
       resource.mime = mime.lookup(file);
       resource.data = data;
 
+      var attributes = new Evernote.ResourceAttributes();
+      attributes.fileName = path.basename(file);
+      attributes.timestamp = new Date().getTime();
+
+      resource.attributes = attributes;
       note.resources = [resource];
 
       var md5 = crypto.createHash('md5');

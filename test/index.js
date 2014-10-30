@@ -1,4 +1,5 @@
 var Evernote = require('../index');
+var path = require('path');
 var assert = require('assert');
 
 describe('Evernote', function () {
@@ -19,6 +20,7 @@ describe('Evernote', function () {
 
     it('should create new note.', function () {
       assert.deepEqual(createdNote.title, options.title);
+      assert.deepEqual(createdNote.resources[0].attributes.fileName, path.basename(options.file));
     });
   });
 
