@@ -1,5 +1,5 @@
 var config = require('../config.json');
-var nevernote = require('../index');
+var nodeNote = require('../index');
 var path = require('path');
 var assert = require('assert');
 
@@ -8,7 +8,7 @@ describe('Evernote', function () {
   var createdNote;
 
   before(function () {
-    evernote = new nevernote(config);
+    evernote = new nodeNote(config);
   });
 
   describe('createNote', function () {

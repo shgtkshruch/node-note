@@ -1,21 +1,21 @@
 {
-  "name": "nevernote",
+  "name": "node-note",
   "version": "0.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --ui bdd --reporter spec"
+    "test": "NODE_ENV=develop mocha --ui bdd --reporter spec"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/shgtkshruch/nevernote.git"
+    "url": "https://github.com/shgtkshruch/node-note.git"
   },
   "author": "shgtkshruch",
   "license": "mit",
   "bugs": {
-    "url": "https://github.com/shgtkshruch/nevernote/issues"
+    "url": "https://github.com/shgtkshruch/node-note/issues"
   },
-  "homepage": "https://github.com/shgtkshruch/nevernote",
+  "homepage": "https://github.com/shgtkshruch/node-note",
   "dependencies": {
     "evernote": "^1.25.3",
     "mime": "^1.2.11"
