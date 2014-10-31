@@ -2,7 +2,7 @@
 
 Evernote wrapper.
 
-## Isntall
+## Install
 
 ```sh
 $ npm install --save node-note
@@ -10,12 +10,12 @@ $ npm install --save node-note
 
 ## Configuration
 
-You need [Evernote API Key](https://dev.evernote.com/), and `config.json`, like this.
+You need [Evernote API Key](https://dev.evernote.com/) and `config.json`, like this.
 
 ```json
 {
   "develop": {
-    "token": "DEVELOPER_TOKEN_FOR_DEVELOPMENT"
+    "token": "DEVELOPER_TOKEN_FOR_SANDBOX"
   },
   "production": {
     "token": "DEVELOPER_TOKEN_FOR_PRODUCTION"
@@ -33,7 +33,7 @@ var evernote = new nodeNote(config);
 
 // Create new note
 var options = {
-  title: new Date().getTime(),
+  title: 'New Note created by node-note',
   body: 'Here is the Evernote logo',
   file: './ev-logo.png'
 }
@@ -44,7 +44,7 @@ evernote.createNote(options, function (createdNote) {
 
 // Delete note
 var options = {
-  title: 'note title'
+  title: 'note title',
   guid: 'note guid'
 }
 
