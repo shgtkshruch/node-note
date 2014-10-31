@@ -8,7 +8,7 @@ describe('Evernote', function () {
   var createdNote;
 
   before(function () {
-    evernote = new nevernote(config.develop.token);
+    evernote = new nevernote(config);
   });
 
   describe('createNote', function () {

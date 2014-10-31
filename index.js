@@ -4,11 +4,22 @@ var path = require('path');
 var crypto = require('crypto');
 var mime = require('mime');
 
-function evernote (token) {
+function evernote (config) {
+  var options = {}
+
+  if (process.env.NODE_ENV === 'production') {
+    options.token = config.production.token;
+    options.sandbox = false;
+  } else {
+    options.token = config.develop.token;
+    options.sandbox = true;
+  }
+
   var client = new Evernote.Client({
-    token: token,
-    sandbox: true
+    token: options.token,
+    sandbox: options.sandbox
   });
+
   this.userStore = client.getUserStore();
   this.noteStore = client.getNoteStore();
 }
@@ -50,7 +61,7 @@ evernote.prototype.createNote = function (options, callback) {
 
   this.noteStore.createNote(note, function(err, createdNote) {
     if (err) {
-      console.log(err);
+      throw err;
     }
     callback(createdNote);
   });
