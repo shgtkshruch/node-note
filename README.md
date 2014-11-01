@@ -194,6 +194,37 @@ Type: `Object`
 
 Returns the current state of the [note](https://dev.evernote.com/doc/reference/Types.html#Struct_Note) in the service.
 
+### evenote.restoreNote(options, callback)
+
+Restore note in trash.
+
+#### options
+
+Required `title` or `guid` field.  
+If you can set both field, set both field.
+
+##### title
+
+Type: `String`
+
+note's title.
+
+##### guid
+
+Type: `String`
+
+note's guid.
+
+#### callback(restoredNote)
+
+Type: `Function`
+
+##### restoredNote
+
+Type: `Object`
+
+Return restored [note](https://dev.evernote.com/doc/reference/Types.html#Struct_Note).
+
 ## LICENCE
 
 MIT

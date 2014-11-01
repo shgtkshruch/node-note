@@ -172,4 +172,48 @@ evernote.prototype.getNote = function (options, callback) {
   });
 }
 
+evernote.prototype.restoreNote = function (options, callback) {
+  if (!options.title && !options.guid) {
+    throw new Error("You shold set 'title' or 'guid'.");
+  }
+
+  var _this = this;
+  async.series([
+    function (cb) {
+      if (!options.title) {
+        _this.getNote({guid: options.guid}, function (note) {
+          cb(null, note.title);
+        });
+      } else {
+        cb(null, options.title);
+      }
+    },
+    function (cb) {
+      if (!options.guid) {
+        _this.getNoteMetadata({title: options.title}, function (metadataList) {
+          cb(null, metadataList[0].guid);
+        });
+      } else {
+        cb(null, options.guid);
+      }
+    }
+  ], function (err, results) {
+    if (err) {
+      throw err;
+    }
+
+    var note = new Evernote.Note();
+    note.title = results[0];
+    note.guid = results[1];
+    note.active = true;
+
+    _this.noteStore.updateNote(note, function(err, restoredNote) {
+      if (err) {
+        throw err;
+      }
+      callback(restoredNote);
+    });
+  });
+}
+
 module.exports = evernote;
