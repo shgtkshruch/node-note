@@ -31,6 +31,27 @@ describe('Evernote', function () {
     });
   });
 
+  describe('getNoteMetadata', function () {
+    var matchNote;
+
+    before(function (done) {
+      var options = {
+        word: 'Evernote'
+      }
+      evernote.getNoteMetadata(options, function (metadataList) {
+        matchNote = metadataList[0];
+        done();
+      });
+    });
+
+    it('should return note metadata that match the word.', function () {
+      assert.deepEqual(matchNote.guid, createdNote.guid);
+      assert.deepEqual(matchNote.title, createdNote.title);
+      assert.deepEqual(matchNote.created, createdNote.created);
+      assert.deepEqual(matchNote.notebookGuid, createdNote.notebookGuid);
+    });
+  });
+
   describe('deleteNote', function () {
     var deletedNote;
 

@@ -104,7 +104,37 @@ evernote.prototype.deleteNote = function (options, callback) {
   note.active = false;
 
   this.noteStore.updateNote(note, function (err, deletedNote) {
+    if (err) {
+      throw err;
+    }
     callback(deletedNote);
+  });
+}
+
+evernote.prototype.getNoteMetadata = function (options, callback) {
+  var filter = new Evernote.NoteFilter();
+
+  if (!options.word) {
+    throw new Error("Can not read property 'word' of undefined.");
+  }
+
+  filter.words = options.word || '';
+
+  var maxNotes = options.maxNotes || 1
+
+  var spec = new Evernote.NotesMetadataResultSpec();
+
+  for (var p in spec) {
+    if (p.indexOf('include') !== -1) {
+      spec[p] = true;
+    }
+  }
+
+  this.noteStore.findNotesMetadata(filter, 0, maxNotes, spec, function (err, noteMetadata) {
+    if (err) {
+      throw err;
+    }
+    callback(noteMetadata.notes);
   });
 }
 
