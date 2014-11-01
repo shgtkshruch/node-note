@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/shgtkshruch/node-note.svg?branch=master)](https://travis-ci.org/shgtkshruch/node-note)
+
 # node-note
 
 Evernote wrapper.
