@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/shgtkshruch/node-note",
   "dependencies": {
+    "async": "^0.9.0",
     "evernote": "^1.25.3",
     "mime": "^1.2.11"
   },

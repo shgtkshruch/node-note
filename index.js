@@ -2,6 +2,7 @@ var Evernote = require('evernote').Evernote;
 var fs = require('fs');
 var path = require('path');
 var crypto = require('crypto');
+var async = require('async');
 var mime = require('mime');
 
 function evernote (config) {
@@ -95,19 +96,35 @@ evernote.prototype.createNote = function (options, callback) {
 }
 
 evernote.prototype.deleteNote = function (options, callback) {
-  var title = options.title;
-  var guid = options.guid;
-  var note = new Evernote.Note();
+  var title = options.title || '';
+  var _this = this;
 
-  note.title = title;
-  note.guid = guid;
-  note.active = false;
-
-  this.noteStore.updateNote(note, function (err, deletedNote) {
-    if (err) {
-      throw err;
+  async.series([
+    function (cb) {
+      if (!options.guid) {
+        _this.getNoteMetadata({word: title}, function (metadataList) {
+          cb(null, metadataList[0].guid);
+        });
+      } else {
+        cb(null, options.guid);
+      }
     }
-    callback(deletedNote);
+  ], function (err, guid) {
+    if (err) {
+      throw new Error("Can not read property 'guid'.");
+    }
+    var note = new Evernote.Note();
+
+    note.title = title;
+    note.guid = guid[0];
+    note.active = false;
+
+    _this.noteStore.updateNote(note, function (err, deletedNote) {
+      if (err) {
+        throw err;
+      }
+      callback(deletedNote);
+    });
   });
 }
 

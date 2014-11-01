@@ -57,8 +57,7 @@ describe('Evernote', function () {
 
     before(function (done) {
       var options = {
-        title: createdNote.title,
-        guid: createdNote.guid
+        title: createdNote.title
       }
 
       evernote.deleteNote(options, function (note) {

@@ -44,13 +44,22 @@ evernote.createNote(options, function (createdNote) {
 
 // Delete note
 var options = {
-  title: 'note title',
-  guid: 'note guid'
+  title: 'note title'
 }
 
 evernote.deleteNote(options, function (deletedNote) {
   console.log('Delete note ' + deletedNote.guid);
 });
+```
+
+If development environment, run command like this.  
+```sh
+$ node index.js
+```
+
+If production environment, run command like this.  
+```sh
+$ NODE_ENV=production node index.js
 ```
 
 ## API
@@ -84,6 +93,10 @@ Attachement file.
 
 Type: `Function`
 
+##### createdNote
+
+Type: `Object`
+
 Return created note. Represents a [single note](https://dev.evernote.com/doc/reference/Types.html#Struct_Note) in the user's account.
 
 ### evernote.deleteNote(options, callback)
@@ -92,16 +105,16 @@ Delete note.
 
 #### options
 
+You should set title or guid.
+
 ##### title
 
-*Required*  
 Type: `String`
 
 Note title.
 
 ##### guid
 
-*Required*  
 Type: `String`
 
 Note guid.
@@ -110,7 +123,39 @@ Note guid.
 
 Type: `Function`
 
+#### deletedNote
+
+Type: `Object`
+
 Return deleted note. Represents a [single note](https://dev.evernote.com/doc/reference/Types.html#Struct_Note) in the user's account.
+
+### evernote.getNoteMetadata(options, callback)
+
+Get note metadata.
+
+#### options
+
+##### word
+
+Type: `String`
+
+If present, a search query string that will filter the set of notes to be returned.
+
+##### maxNotes
+
+Type: `Number`
+
+The mximum notes to return in this query.
+
+#### callback(noteMetadataList)
+
+Type: `Function`
+
+##### noteMetadataList
+
+Type: `List`
+
+Return the [metadata list](https://dev.evernote.com/doc/reference/NoteStore.html#Struct_NotesMetadataList) of notes that match the criteria.
 
 ## LICENCE
 
