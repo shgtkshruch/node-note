@@ -6,18 +6,17 @@ var assert = require('assert');
 describe('Evernote', function () {
   var evernote;
   var createdNote;
+  var options = {
+    title: new Date().getTime(),
+    body: 'Here is the Evernote logo',
+    file: './test/test.png'
+  }
 
   before(function () {
     evernote = new nodeNote(config);
   });
 
   describe('createNote', function () {
-    var options = {
-      title: new Date().getTime(),
-      body: 'Here is the Evernote logo',
-      file: './test/test.png'
-    }
-
     before(function (done) {
       evernote.createNote(options, function (note) {
         createdNote = note;
@@ -46,9 +45,31 @@ describe('Evernote', function () {
 
     it('should return note metadata that match the word.', function () {
       assert.deepEqual(matchNote.guid, createdNote.guid);
-      assert.deepEqual(matchNote.title, createdNote.title);
+      assert.deepEqual(matchNote.title, options.title);
       assert.deepEqual(matchNote.created, createdNote.created);
       assert.deepEqual(matchNote.notebookGuid, createdNote.notebookGuid);
+    });
+  });
+
+  describe('getNote', function () {
+    var getNote;
+
+    before(function (done) {
+      var options = {
+        guid: createdNote.guid,
+        withContent: true
+      }
+
+      evernote.getNote(options, function (note) {
+        getNote = note;
+        done();
+      });
+    });
+
+    it('should return note data.', function () {
+      assert.deepEqual(getNote.guid, createdNote.guid);
+      assert.deepEqual(getNote.title, options.title);
+      assert.deepEqual(getNote.content.indexOf(options.body) > -1, true);
     });
   });
 

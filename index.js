@@ -44,8 +44,8 @@ evernote.prototype.versionCheck = function () {
 
 evernote.prototype.createNote = function (options, callback) {
   var title = options.title || 'Crete from Evernote API';
-  var body = options.body || null;
-  var file = options.file || null;
+  var body = options.body || '';
+  var file = options.file || '';
   var note = new Evernote.Note();
 
   note.title = title;
@@ -152,6 +152,23 @@ evernote.prototype.getNoteMetadata = function (options, callback) {
       throw err;
     }
     callback(noteMetadata.notes);
+  });
+}
+
+evernote.prototype.getNote = function (options, callback) {
+  if (!options.guid) {
+    throw new Error("Can not read property 'guid' of undefined.");
+  }
+
+  var guid = options.guid;
+  var withContent = options.withContent || null;
+  var withRecource = options.withRecource || null;
+
+  this.noteStore.getNote(guid, withContent, withRecource, false, false, function (err, note) {
+    if (err) {
+      throw err;
+    }
+    callback(note);
   });
 }
 

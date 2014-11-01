@@ -159,6 +159,41 @@ Type: `List`
 
 Return the [metadata list](https://dev.evernote.com/doc/reference/NoteStore.html#Struct_NotesMetadataList) of notes that match the criteria.
 
+### evernote.getNote(options, callback)
+
+Get note.
+
+#### options
+
+##### guid
+
+*Required*
+Type: `String`
+
+The GUID of the note to be retrieved.
+
+##### withContent
+
+Type: `Bool`
+
+If true, the note will include the ENML contents of its 'content' field.
+
+##### withRecouce
+
+Type: `Bool`
+
+If true, any Resource elements in this Note will include the binary contents of their 'data' field's body.
+
+#### callback(note)
+
+Type: `Function`
+
+##### note
+
+Type: `Object`
+
+Returns the current state of the [note](https://dev.evernote.com/doc/reference/Types.html#Struct_Note) in the service.
+
 ## LICENCE
 
 MIT
