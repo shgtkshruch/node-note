@@ -249,6 +249,47 @@ Type: `Number`
 
 The Update Sequence Number for this change within the account.
 
-## LICENCE
+### evernote.createNotebook(options, callback)
+
+Create new notebook.
+
+#### options
+
+##### name
+
+*Required*  
+Type: `String`
+
+Notebook name.
+
+#### callback(createdNotebook)
+
+Type: `Function`
+
+##### createdNotebook
+
+Type: `Object`
+
+### evernote.expungeNotebook(guid, callback)
+
+Permanently removes a Notebook from the service.
+
+#### guid
+
+Type: `String`
+
+Note guid.
+
+#### callback(sequenceNum)
+
+Type: `Function`
+
+##### sequencenum
+
+Type: `Number`
+
+The Update Sequence Number for this change within the account.
+
+## LICENSE
 
 MIT

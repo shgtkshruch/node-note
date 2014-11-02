@@ -186,6 +186,35 @@ evernote.prototype.expungeNote = function (guid, callback) {
   });
 }
 
+evernote.prototype.createNotebook = function (options, callback) {
+  if (!options.name) {
+    throw new Error("You should set 'name' property.");
+  }
+
+  notebook = new Evernote.Notebook;
+  notebook.name = options.name;
+
+  this.noteStore.createNotebook(notebook, function (err, createdNotebook) {
+    if (err) {
+      throw err;
+    }
+    callback(createdNotebook);
+  });
+}
+
+evernote.prototype.expungeNotebook = function (guid, callback) {
+  if (!guid) {
+    throw new Error("You should set 'guid' property.");
+  }
+
+  this.noteStore.expungeNotebook(guid, function (err, seqNum) {
+    if (err) {
+      throw err;
+    }
+    callback(seqNum);
+  });
+}
+
 evernote.prototype._getTitleGuid = function (options, callback) {
   if (!options.title && !options.guid) {
     throw new Error("You shold set 'title' or 'guid'.");

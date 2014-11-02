@@ -5,6 +5,7 @@ var assert = require('assert');
 
 describe('Evernote', function () {
   var evernote;
+  var createdNotebook;
   var createdNote;
 
   before(function () {
@@ -14,10 +15,27 @@ describe('Evernote', function () {
   describe('Create & Read method', function () {
 
     var options = {
-      title: new Date().getTime(),
+      title: 'new note',
       body: 'Here is the Evernote logo',
       file: './test/test.png'
     }
+
+    describe('createNotebook', function () {
+      var options = {
+        name: 'new note book'
+      }
+
+      before(function (done) {
+        evernote.createNotebook(options, function (notebook) {
+          createdNotebook = notebook;
+          done();
+        });
+      });
+
+      it('should create new notebook.', function () {
+        assert.deepEqual(createdNotebook.name, options.name);
+      });
+    });
 
     describe('createNote', function () {
       before(function (done) {
@@ -151,6 +169,21 @@ describe('Evernote', function () {
       });
 
       it('shold expunge note.', function () {
+        assert.deepEqual(typeof result, 'number');
+      });
+    });
+
+    describe('expungeNotebook', function () {
+      var result;
+
+      before(function (done) {
+        evernote.expungeNotebook(createdNotebook.guid, function (seqNum) {
+          result = seqNum;
+          done();
+        });
+      });
+
+      it('should delete notebook.', function () {
         assert.deepEqual(typeof result, 'number');
       });
     });
