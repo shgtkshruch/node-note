@@ -211,6 +211,22 @@ evernote.prototype.expungeNotebook = function (guid, callback) {
   });
 }
 
+evernote.prototype.getNotebook = function (options, callback) {
+  var matchNotebook;
+
+  this.noteStore.listNotebooks(function (err, notebookList) {
+    if (err) {
+      throw err;
+    }
+    notebookList.forEach(function (notebook) {
+      if (notebook.name.indexOf(options.name) !== -1) {
+        matchNotebook = notebook;
+      }
+    });
+    callback(matchNotebook);
+  });
+}
+
 evernote.prototype._getTitleGuid = function (options, callback) {
   if (!options.title && !options.guid) {
     throw new Error("You shold set 'title' or 'guid'.");
