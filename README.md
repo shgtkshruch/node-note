@@ -107,7 +107,8 @@ Delete note.
 
 #### options
 
-You should set title or guid.
+Required `title` or `guid` field.  
+If you can set both field, set both field.
 
 ##### title
 
@@ -167,7 +168,7 @@ Get note.
 
 ##### guid
 
-*Required*
+*Required*  
 Type: `String`
 
 The GUID of the note to be retrieved.

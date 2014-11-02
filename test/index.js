@@ -40,6 +40,7 @@ describe('Evernote', function () {
         var options = {
           word: 'Evernote'
         }
+
         evernote.getNoteMetadata(options, function (metadataList) {
           matchNote = metadataList[0];
           done();
@@ -80,7 +81,7 @@ describe('Evernote', function () {
   describe('Update & Delete method', function () {
     var deletedNote;
 
-    describe('deleteNote', function () {
+    describe('deleteNote with title', function () {
       before(function (done) {
         var options = {
           title: createdNote.title
@@ -94,6 +95,7 @@ describe('Evernote', function () {
 
       it('should delete note.', function () {
         assert.deepEqual(createdNote.guid, deletedNote.guid);
+        assert.deepEqual(createdNote.title, deletedNote.title);
         assert.deepEqual(deletedNote.active, false);
       });
     });
@@ -116,6 +118,25 @@ describe('Evernote', function () {
         assert.deepEqual(restoredNote.active, true);
         assert.deepEqual(restoredNote.guid, deletedNote.guid);
         assert.deepEqual(restoredNote.title, deletedNote.title);
+      });
+    });
+
+    describe('deleteNote with guid', function () {
+      before(function (done) {
+        var options = {
+          guid: createdNote.guid
+        }
+
+        evernote.deleteNote(options, function (note) {
+          deletedNote = note;
+          done();
+        });
+      });
+
+      it('should delete note.', function () {
+        assert.deepEqual(createdNote.guid, deletedNote.guid);
+        assert.deepEqual(createdNote.title, deletedNote.title);
+        assert.deepEqual(deletedNote.active, false);
       });
     });
   });

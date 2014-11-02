@@ -96,27 +96,13 @@ evernote.prototype.createNote = function (options, callback) {
 }
 
 evernote.prototype.deleteNote = function (options, callback) {
-  var title = options.title || '';
   var _this = this;
 
-  async.series([
-    function (cb) {
-      if (!options.guid) {
-        _this.getNoteMetadata({word: title}, function (metadataList) {
-          cb(null, metadataList[0].guid);
-        });
-      } else {
-        cb(null, options.guid);
-      }
-    }
-  ], function (err, guid) {
-    if (err) {
-      throw new Error("Can not read property 'guid'.");
-    }
+  this._getTitleGuid(options, function (title, guid) {
     var note = new Evernote.Note();
 
     note.title = title;
-    note.guid = guid[0];
+    note.guid = guid;
     note.active = false;
 
     _this.noteStore.updateNote(note, function (err, deletedNote) {
@@ -129,11 +115,11 @@ evernote.prototype.deleteNote = function (options, callback) {
 }
 
 evernote.prototype.getNoteMetadata = function (options, callback) {
-  var filter = new Evernote.NoteFilter();
-
   if (!options.word) {
     throw new Error("Can not read property 'word' of undefined.");
   }
+
+  var filter = new Evernote.NoteFilter();
 
   filter.words = options.word || '';
 
@@ -173,11 +159,31 @@ evernote.prototype.getNote = function (options, callback) {
 }
 
 evernote.prototype.restoreNote = function (options, callback) {
+  var _this = this;
+
+  this._getTitleGuid(options, function (title, guid) {
+    var note = new Evernote.Note();
+
+    note.title = title;
+    note.guid = guid;
+    note.active = true;
+
+    _this.noteStore.updateNote(note, function(err, restoredNote) {
+      if (err) {
+        throw err;
+      }
+      callback(restoredNote);
+    });
+  });
+}
+
+evernote.prototype._getTitleGuid = function (options, callback) {
   if (!options.title && !options.guid) {
     throw new Error("You shold set 'title' or 'guid'.");
   }
 
   var _this = this;
+
   async.series([
     function (cb) {
       if (!options.title) {
@@ -190,7 +196,7 @@ evernote.prototype.restoreNote = function (options, callback) {
     },
     function (cb) {
       if (!options.guid) {
-        _this.getNoteMetadata({title: options.title}, function (metadataList) {
+        _this.getNoteMetadata({word: options.title}, function (metadataList) {
           cb(null, metadataList[0].guid);
         });
       } else {
@@ -201,18 +207,7 @@ evernote.prototype.restoreNote = function (options, callback) {
     if (err) {
       throw err;
     }
-
-    var note = new Evernote.Note();
-    note.title = results[0];
-    note.guid = results[1];
-    note.active = true;
-
-    _this.noteStore.updateNote(note, function(err, restoredNote) {
-      if (err) {
-        throw err;
-      }
-      callback(restoredNote);
-    });
+    callback(results[0], results[1]);
   });
 }
 
