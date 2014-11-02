@@ -177,6 +177,15 @@ evernote.prototype.restoreNote = function (options, callback) {
   });
 }
 
+evernote.prototype.expungeNote = function (guid, callback) {
+  this.noteStore.expungeNote(guid, function (err, result) {
+    if (err) {
+      throw err;
+    };
+    callback(result);
+  });
+}
+
 evernote.prototype._getTitleGuid = function (options, callback) {
   if (!options.title && !options.guid) {
     throw new Error("You shold set 'title' or 'guid'.");

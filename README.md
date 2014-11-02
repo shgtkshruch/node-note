@@ -226,6 +226,29 @@ Type: `Object`
 
 Return restored [note](https://dev.evernote.com/doc/reference/Types.html#Struct_Note).
 
+### evernote.expungeNote(guid, callback)
+
+Permanently removes a Note, and all of its Resources, from the service.
+
+#### options
+
+##### guid
+
+*Required*  
+Type: `String`
+
+Note guid.
+
+#### callback(sequenceNum)
+
+Type: `Function`
+
+##### sequenceNum
+
+Type: `Number`
+
+The Update Sequence Number for this change within the account.
+
 ## LICENCE
 
 MIT

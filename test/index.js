@@ -47,7 +47,7 @@ describe('Evernote', function () {
         });
       });
 
-      it('should return note metadata that match the word.', function () {
+      it('should resulturn note metadata that match the word.', function () {
         assert.deepEqual(matchNote.guid, createdNote.guid);
         assert.deepEqual(matchNote.title, options.title);
         assert.deepEqual(matchNote.created, createdNote.created);
@@ -70,7 +70,7 @@ describe('Evernote', function () {
         });
       });
 
-      it('should return note data.', function () {
+      it('should resulturn note data.', function () {
         assert.deepEqual(getNote.guid, createdNote.guid);
         assert.deepEqual(getNote.title, options.title);
         assert.deepEqual(getNote.content.indexOf(options.body) > -1, true);
@@ -137,6 +137,21 @@ describe('Evernote', function () {
         assert.deepEqual(createdNote.guid, deletedNote.guid);
         assert.deepEqual(createdNote.title, deletedNote.title);
         assert.deepEqual(deletedNote.active, false);
+      });
+    });
+
+    describe('expungeNote', function () {
+      var result;
+
+      before(function (done) {
+        evernote.expungeNote(createdNote.guid, function (seqNum) {
+          result = seqNum;
+          done();
+        });
+      });
+
+      it('shold expunge note.', function () {
+        assert.deepEqual(typeof result, 'number');
       });
     });
   });
