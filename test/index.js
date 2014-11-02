@@ -12,30 +12,12 @@ describe('Evernote', function () {
     evernote = new nodeNote(config);
   });
 
-  describe('Create & Read method', function () {
-
+  describe('Note', function () {
     var options = {
       title: 'new note',
       body: 'Here is the Evernote logo',
       file: './test/test.png'
-    }
-
-    describe('createNotebook', function () {
-      var options = {
-        name: 'new note book'
-      }
-
-      before(function (done) {
-        evernote.createNotebook(options, function (notebook) {
-          createdNotebook = notebook;
-          done();
-        });
-      });
-
-      it('should create new notebook.', function () {
-        assert.deepEqual(createdNotebook.name, options.name);
-      });
-    });
+    };
 
     describe('createNote', function () {
       before(function (done) {
@@ -57,7 +39,7 @@ describe('Evernote', function () {
       before(function (done) {
         var options = {
           word: 'Evernote'
-        }
+        };
 
         evernote.getNoteMetadata(options, function (metadataList) {
           matchNote = metadataList[0];
@@ -65,7 +47,7 @@ describe('Evernote', function () {
         });
       });
 
-      it('should resulturn note metadata that match the word.', function () {
+      it('should return note metadata that match the word.', function () {
         assert.deepEqual(matchNote.guid, createdNote.guid);
         assert.deepEqual(matchNote.title, options.title);
         assert.deepEqual(matchNote.created, createdNote.created);
@@ -80,7 +62,7 @@ describe('Evernote', function () {
         var options = {
           guid: createdNote.guid,
           withContent: true
-        }
+        };
 
         evernote.getNote(options, function (note) {
           getNote = note;
@@ -88,22 +70,20 @@ describe('Evernote', function () {
         });
       });
 
-      it('should resulturn note data.', function () {
+      it('should return note data.', function () {
         assert.deepEqual(getNote.guid, createdNote.guid);
         assert.deepEqual(getNote.title, options.title);
         assert.deepEqual(getNote.content.indexOf(options.body) > -1, true);
       });
     });
-  });
-
-  describe('Update & Delete method', function () {
-    var deletedNote;
 
     describe('deleteNote with title', function () {
+      var deletedNote;
+
       before(function (done) {
         var options = {
           title: createdNote.title
-        }
+        };
 
         evernote.deleteNote(options, function (note) {
           deletedNote = note;
@@ -112,8 +92,8 @@ describe('Evernote', function () {
       });
 
       it('should delete note.', function () {
-        assert.deepEqual(createdNote.guid, deletedNote.guid);
-        assert.deepEqual(createdNote.title, deletedNote.title);
+        assert.deepEqual(deletedNote.guid, createdNote.guid);
+        assert.deepEqual(deletedNote.title, createdNote.title);
         assert.deepEqual(deletedNote.active, false);
       });
     });
@@ -123,8 +103,8 @@ describe('Evernote', function () {
 
       before(function (done) {
         var options = {
-          guid: deletedNote.guid
-        }
+          guid: createdNote.guid
+        };
 
         evernote.restoreNote(options, function (note) {
           restoredNote = note;
@@ -134,16 +114,18 @@ describe('Evernote', function () {
 
       it('shold restore inactive note.', function () {
         assert.deepEqual(restoredNote.active, true);
-        assert.deepEqual(restoredNote.guid, deletedNote.guid);
-        assert.deepEqual(restoredNote.title, deletedNote.title);
+        assert.deepEqual(restoredNote.guid, createdNote.guid);
+        assert.deepEqual(restoredNote.title, createdNote.title);
       });
     });
 
     describe('deleteNote with guid', function () {
+      var deletedNote;
+
       before(function (done) {
         var options = {
           guid: createdNote.guid
-        }
+        };
 
         evernote.deleteNote(options, function (note) {
           deletedNote = note;
@@ -152,8 +134,8 @@ describe('Evernote', function () {
       });
 
       it('should delete note.', function () {
-        assert.deepEqual(createdNote.guid, deletedNote.guid);
-        assert.deepEqual(createdNote.title, deletedNote.title);
+        assert.deepEqual(deletedNote.guid, createdNote.guid);
+        assert.deepEqual(deletedNote.title, createdNote.title);
         assert.deepEqual(deletedNote.active, false);
       });
     });
@@ -170,6 +152,42 @@ describe('Evernote', function () {
 
       it('shold expunge note.', function () {
         assert.deepEqual(typeof result, 'number');
+      });
+    });
+  });
+
+  describe('Notebook', function () {
+    var createdNotebook;
+    var options = {
+      name: 'new note book'
+    };
+
+    describe('createNotebook', function () {
+      before(function (done) {
+        evernote.createNotebook(options, function (notebook) {
+          createdNotebook = notebook;
+          done();
+        });
+      });
+
+      it('should create new notebook.', function () {
+        assert.deepEqual(createdNotebook.name, options.name);
+      });
+    });
+
+    describe('getNotebook', function () {
+      var notebook;
+
+      before(function (done) {
+        evernote.getNotebook(options, function (matchNotebook) {
+          notebook = matchNotebook;
+          done();
+        });
+      });
+
+      it('should return notebook that matched the name.', function () {
+        assert.deepEqual(notebook.guid, createdNotebook.guid);
+        assert.deepEqual(notebook.name, options.name);
       });
     });
 
