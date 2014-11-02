@@ -96,8 +96,6 @@ evernote.prototype.createNote = function (options, callback) {
 }
 
 evernote.prototype.deleteNote = function (options, callback) {
-  var _this = this;
-
   this._getTitleGuid(options, function (title, guid) {
     var note = new Evernote.Note();
 
@@ -105,13 +103,13 @@ evernote.prototype.deleteNote = function (options, callback) {
     note.guid = guid;
     note.active = false;
 
-    _this.noteStore.updateNote(note, function (err, deletedNote) {
+    this.noteStore.updateNote(note, function (err, deletedNote) {
       if (err) {
         throw err;
       }
       callback(deletedNote);
     });
-  });
+  }.bind(this));
 }
 
 evernote.prototype.getNoteMetadata = function (options, callback) {
@@ -159,8 +157,6 @@ evernote.prototype.getNote = function (options, callback) {
 }
 
 evernote.prototype.restoreNote = function (options, callback) {
-  var _this = this;
-
   this._getTitleGuid(options, function (title, guid) {
     var note = new Evernote.Note();
 
@@ -168,13 +164,13 @@ evernote.prototype.restoreNote = function (options, callback) {
     note.guid = guid;
     note.active = true;
 
-    _this.noteStore.updateNote(note, function(err, restoredNote) {
+    this.noteStore.updateNote(note, function(err, restoredNote) {
       if (err) {
         throw err;
       }
       callback(restoredNote);
     });
-  });
+  }.bind(this));
 }
 
 evernote.prototype.expungeNote = function (guid, callback) {
@@ -220,27 +216,25 @@ evernote.prototype._getTitleGuid = function (options, callback) {
     throw new Error("You shold set 'title' or 'guid'.");
   }
 
-  var _this = this;
-
   async.series([
     function (cb) {
       if (!options.title) {
-        _this.getNote({guid: options.guid}, function (note) {
+        this.getNote({guid: options.guid}, function (note) {
           cb(null, note.title);
         });
       } else {
         cb(null, options.title);
       }
-    },
+    }.bind(this),
     function (cb) {
       if (!options.guid) {
-        _this.getNoteMetadata({word: options.title}, function (metadataList) {
+        this.getNoteMetadata({word: options.title}, function (metadataList) {
           cb(null, metadataList[0].guid);
         });
       } else {
         cb(null, options.guid);
       }
-    }
+    }.bind(this)
   ], function (err, results) {
     if (err) {
       throw err;
