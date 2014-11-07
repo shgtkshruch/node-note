@@ -1,6 +1,6 @@
 {
   "name": "node-note",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Evernote wrapper",
   "main": "index.js",
   "scripts": {
