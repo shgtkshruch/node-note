@@ -97,6 +97,24 @@ Type: `String`
 
 Attachement file.
 
+##### tag
+
+Type: `Array`
+
+List of the tag name.
+
+##### author
+
+Type: `String`
+
+The author of the content of the note.
+
+##### url
+
+Type: `String`
+
+The original location where the resource was hosted.
+
 #### callback(createdNote)
 
 Type: `Function`

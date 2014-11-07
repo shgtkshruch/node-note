@@ -14,6 +14,9 @@ describe('Evernote', function () {
         title: 'new note',
         body: 'Here is the Evernote logo',
         file: './test/test.png',
+        author: 'shgtkshruch',
+        url: 'http://example.com',
+        tag: ['test', 'picture', 'evernote'],
         notebookName: notebookOptions.name
       };
 
@@ -38,6 +41,7 @@ describe('Evernote', function () {
     describe('note', function () {
       before(function (done) {
         evernote.createNote(noteOptions, function (note) {
+          console.log(note);
           createdNote = note;
           done();
         });
@@ -47,6 +51,9 @@ describe('Evernote', function () {
         assert.deepEqual(createdNote.title, noteOptions.title);
         assert.deepEqual(createdNote.notebookGuid, createdNotebook.guid);
         assert.deepEqual(createdNote.resources[0].attributes.fileName, path.basename(noteOptions.file));
+        assert.deepEqual(createdNote.attributes.author, noteOptions.author);
+        assert.deepEqual(createdNote.attributes.sourceURL, noteOptions.url);
+        assert.deepEqual(createdNote.tagGuids.length, 3);
       });
     });
   });

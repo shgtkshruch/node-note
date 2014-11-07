@@ -44,10 +44,15 @@ evernote.prototype.versionCheck = function () {
 
 evernote.prototype.createNote = function (options, callback) {
   var self = this;
-  var title = options.title || 'Crete from Evernote API';
+  var title = options.title || 'No title.';
   var body = options.body || '';
   var file = options.file || '';
+  var tag = options.tag || '';
+  var sourceURL = options.url || '';
+  var author = options.author || '';
+
   var note = new Evernote.Note();
+  var noteAttributes = new Evernote.NoteAttributes();
 
   if (options.notebookName) {
     this.getNotebook({name: options.notebookName}, function (notebook) {
@@ -60,6 +65,11 @@ evernote.prototype.createNote = function (options, callback) {
 
   function noteBase () {
     note.title = title;
+    note.tagNames = tag;
+
+    noteAttributes.author = author;
+    noteAttributes.sourceURL = sourceURL;
+    note.attributes = noteAttributes;
 
     note.content = '<?xml version="1.0" encoding="UTF-8"?>';
     note.content += '<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">';
