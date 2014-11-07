@@ -85,6 +85,12 @@ Type: `String`
 
 Note body.
 
+##### notebookName
+
+Type: `String`
+
+Notebook name of target.
+
 ##### file
 
 Type: `String`

@@ -43,29 +43,41 @@ evernote.prototype.versionCheck = function () {
 }
 
 evernote.prototype.createNote = function (options, callback) {
+  var self = this;
   var title = options.title || 'Crete from Evernote API';
   var body = options.body || '';
   var file = options.file || '';
   var note = new Evernote.Note();
 
-  note.title = title;
-
-  note.content = '<?xml version="1.0" encoding="UTF-8"?>';
-  note.content += '<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">';
-  note.content += '<en-note>' + body;
-
-  if (file) {
-    _addResouce(file);
+  if (options.notebookName) {
+    this.getNotebook({name: options.notebookName}, function (notebook) {
+      note.notebookGuid = notebook.guid;
+      noteBase();
+    });
+  } else {
+    noteBase();
   }
 
-  note.content += '</en-note>';
+  function noteBase () {
+    note.title = title;
 
-  this.noteStore.createNote(note, function(err, createdNote) {
-    if (err) {
-      throw err;
+    note.content = '<?xml version="1.0" encoding="UTF-8"?>';
+    note.content += '<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">';
+    note.content += '<en-note>' + body;
+
+    if (file) {
+      _addResouce(file);
     }
-    callback(createdNote);
-  });
+
+    note.content += '</en-note>';
+
+    self.noteStore.createNote(note, function(err, createdNote) {
+      if (err) {
+        throw err;
+      }
+      callback(createdNote);
+    });
+  }
 
   function _addResouce (file) {
     var attachment = fs.readFileSync(file);

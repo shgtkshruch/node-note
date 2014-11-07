@@ -4,35 +4,54 @@ var path = require('path');
 var assert = require('assert');
 
 describe('Evernote', function () {
-  var evernote;
-  var createdNotebook;
-  var createdNote;
+  var evernote,
+      createdNotebook,
+      createdNote,
+      notebookOptions = {
+        name: 'new note book'
+      },
+      noteOptions = {
+        title: 'new note',
+        body: 'Here is the Evernote logo',
+        file: './test/test.png',
+        notebookName: notebookOptions.name
+      };
 
   before(function () {
     evernote = new nodeNote(config);
   });
 
-  describe('Note', function () {
-    var options = {
-      title: 'new note',
-      body: 'Here is the Evernote logo',
-      file: './test/test.png'
-    };
-
-    describe('createNote', function () {
+  describe('Create', function () {
+    describe('notebook', function () {
       before(function (done) {
-        evernote.createNote(options, function (note) {
+        evernote.createNotebook(notebookOptions, function (notebook) {
+          createdNotebook = notebook;
+          done();
+        });
+      });
+
+      it('should create new notebook.', function () {
+        assert.deepEqual(createdNotebook.name, notebookOptions.name);
+      });
+    });
+
+    describe('note', function () {
+      before(function (done) {
+        evernote.createNote(noteOptions, function (note) {
           createdNote = note;
           done();
         });
       });
 
       it('should create new note.', function () {
-        assert.deepEqual(createdNote.title, options.title);
-        assert.deepEqual(createdNote.resources[0].attributes.fileName, path.basename(options.file));
+        assert.deepEqual(createdNote.title, noteOptions.title);
+        assert.deepEqual(createdNote.notebookGuid, createdNotebook.guid);
+        assert.deepEqual(createdNote.resources[0].attributes.fileName, path.basename(noteOptions.file));
       });
     });
+  });
 
+  describe('Read', function () {
     describe('getNoteMetadata', function () {
       var matchNote;
 
@@ -49,7 +68,7 @@ describe('Evernote', function () {
 
       it('should return note metadata that match the word.', function () {
         assert.deepEqual(matchNote.guid, createdNote.guid);
-        assert.deepEqual(matchNote.title, options.title);
+        assert.deepEqual(matchNote.title, createdNote.title);
         assert.deepEqual(matchNote.created, createdNote.created);
         assert.deepEqual(matchNote.notebookGuid, createdNote.notebookGuid);
       });
@@ -72,12 +91,30 @@ describe('Evernote', function () {
 
       it('should return note data.', function () {
         assert.deepEqual(getNote.guid, createdNote.guid);
-        assert.deepEqual(getNote.title, options.title);
-        assert.deepEqual(getNote.content.indexOf(options.body) > -1, true);
+        assert.deepEqual(getNote.title, createdNote.title);
+        assert.deepEqual(getNote.content.indexOf(noteOptions.body) > -1, true);
       });
     });
 
-    describe('deleteNote with title', function () {
+    describe('getNotebook', function () {
+      var notebook;
+
+      before(function (done) {
+        evernote.getNotebook(notebookOptions, function (matchNotebook) {
+          notebook = matchNotebook;
+          done();
+        });
+      });
+
+      it('should return notebook that matched the name.', function () {
+        assert.deepEqual(notebook.guid, createdNotebook.guid);
+        assert.deepEqual(notebook.name, createdNotebook.name);
+      });
+    });
+  });
+
+  describe('Delete', function () {
+    describe('note with title', function () {
       var deletedNote;
 
       before(function (done) {
@@ -154,42 +191,6 @@ describe('Evernote', function () {
         assert.deepEqual(typeof result, 'number');
       });
     });
-  });
-
-  describe('Notebook', function () {
-    var createdNotebook;
-    var options = {
-      name: 'new note book'
-    };
-
-    describe('createNotebook', function () {
-      before(function (done) {
-        evernote.createNotebook(options, function (notebook) {
-          createdNotebook = notebook;
-          done();
-        });
-      });
-
-      it('should create new notebook.', function () {
-        assert.deepEqual(createdNotebook.name, options.name);
-      });
-    });
-
-    describe('getNotebook', function () {
-      var notebook;
-
-      before(function (done) {
-        evernote.getNotebook(options, function (matchNotebook) {
-          notebook = matchNotebook;
-          done();
-        });
-      });
-
-      it('should return notebook that matched the name.', function () {
-        assert.deepEqual(notebook.guid, createdNotebook.guid);
-        assert.deepEqual(notebook.name, options.name);
-      });
-    });
 
     describe('expungeNotebook', function () {
       var result;
@@ -206,5 +207,4 @@ describe('Evernote', function () {
       });
     });
   });
-
 });
