@@ -4,7 +4,8 @@
   "description": "Evernote wrapper",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=develop mocha --ui bdd --reporter spec --timeout 5000"
+    "test": "NODE_ENV=develop mocha --ui bdd --reporter spec --timeout 5000",
+    "testpro": "NODE_ENV=production mocha --ui bdd --reporter spec --timeout 5000"
   },
   "files": [
     "index.js"

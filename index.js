@@ -6,7 +6,7 @@ var async = require('async');
 var mime = require('mime');
 
 function evernote (config) {
-  var options = {}
+  var options = {};
 
   if (process.env.NODE_ENV === 'production') {
     options.token = config.production.token;
@@ -40,7 +40,7 @@ evernote.prototype.versionCheck = function () {
       }
     }
   );
-}
+};
 
 evernote.prototype.createNote = function (options, callback) {
   var self = this;
@@ -50,6 +50,7 @@ evernote.prototype.createNote = function (options, callback) {
   var tag = options.tag || '';
   var sourceURL = options.url || '';
   var author = options.author || '';
+  var width = options.width || '';
 
   var note = new Evernote.Note();
   var noteAttributes = new Evernote.NoteAttributes();
@@ -73,7 +74,9 @@ evernote.prototype.createNote = function (options, callback) {
 
     note.content = '<?xml version="1.0" encoding="UTF-8"?>';
     note.content += '<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">';
-    note.content += '<en-note>' + body;
+    note.content += width ?
+      '<en-note style="max-width:' + width + ';margin:0 auto;">' : '<en-note>';
+    note.content += body;
 
     if (file) {
       _addResouce(file);
@@ -115,7 +118,7 @@ evernote.prototype.createNote = function (options, callback) {
 
     note.content += '<br/><en-media type="' + resource.mime + '" hash="' + hashHex + '"/>';
   }
-}
+};
 
 evernote.prototype.deleteNote = function (options, callback) {
   this._getTitleGuid(options, function (title, guid) {
@@ -132,7 +135,7 @@ evernote.prototype.deleteNote = function (options, callback) {
       callback(deletedNote);
     });
   }.bind(this));
-}
+};
 
 evernote.prototype.getNoteMetadata = function (options, callback) {
   if (!options.word) {
@@ -143,7 +146,7 @@ evernote.prototype.getNoteMetadata = function (options, callback) {
 
   filter.words = options.word || '';
 
-  var maxNotes = options.maxNotes || 1
+  var maxNotes = options.maxNotes || 1;
 
   var spec = new Evernote.NotesMetadataResultSpec();
 
@@ -159,7 +162,7 @@ evernote.prototype.getNoteMetadata = function (options, callback) {
     }
     callback(noteMetadata.notes);
   });
-}
+};
 
 evernote.prototype.getNote = function (options, callback) {
   if (!options.guid) {
@@ -176,7 +179,7 @@ evernote.prototype.getNote = function (options, callback) {
     }
     callback(note);
   });
-}
+};
 
 evernote.prototype.restoreNote = function (options, callback) {
   this._getTitleGuid(options, function (title, guid) {
@@ -193,23 +196,23 @@ evernote.prototype.restoreNote = function (options, callback) {
       callback(restoredNote);
     });
   }.bind(this));
-}
+};
 
 evernote.prototype.expungeNote = function (guid, callback) {
   this.noteStore.expungeNote(guid, function (err, result) {
     if (err) {
       throw err;
-    };
+    }
     callback(result);
   });
-}
+};
 
 evernote.prototype.createNotebook = function (options, callback) {
   if (!options.name) {
     throw new Error("You should set 'name' property.");
   }
 
-  notebook = new Evernote.Notebook;
+  notebook = new Evernote.Notebook();
   notebook.name = options.name;
 
   this.noteStore.createNotebook(notebook, function (err, createdNotebook) {
@@ -218,7 +221,7 @@ evernote.prototype.createNotebook = function (options, callback) {
     }
     callback(createdNotebook);
   });
-}
+};
 
 evernote.prototype.expungeNotebook = function (guid, callback) {
   if (!guid) {
@@ -231,7 +234,7 @@ evernote.prototype.expungeNotebook = function (guid, callback) {
     }
     callback(seqNum);
   });
-}
+};
 
 evernote.prototype.getNotebook = function (options, callback) {
   var matchNotebook;
@@ -247,7 +250,7 @@ evernote.prototype.getNotebook = function (options, callback) {
     });
     callback(matchNotebook);
   });
-}
+};
 
 evernote.prototype.updateNote = function (options, callback) {
   if (!options.title) {
@@ -260,7 +263,10 @@ evernote.prototype.updateNote = function (options, callback) {
   var newTitle = options.newTitle || '';
 
   if (options.body) {
-    var content = '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note>'
+    var content = '<?xml version="1.0" encoding="UTF-8"?>';
+    content += '<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">';
+    content += options.width ?
+      '<en-note style="max-width:' + options.width + ';margin:0 auto;">' : '<en-note>';
     content += options.body;
     content += '</en-note>';
     note.content = content;
@@ -282,7 +288,7 @@ evernote.prototype.updateNote = function (options, callback) {
       callback(note);
     });
   });
-}
+};
 
 evernote.prototype._getTitleGuid = function (options, callback) {
   if (!options.title && !options.guid) {
@@ -314,6 +320,6 @@ evernote.prototype._getTitleGuid = function (options, callback) {
     }
     callback(results[0], results[1]);
   });
-}
+};
 
 module.exports = evernote;

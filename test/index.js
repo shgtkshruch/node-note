@@ -17,6 +17,7 @@ describe('Evernote', function () {
         author: 'shgtkshruch',
         url: 'http://example.com',
         tag: ['test', 'picture', 'evernote'],
+        width: '500px',
         notebookName: notebookOptions.name
       };
 
@@ -41,8 +42,10 @@ describe('Evernote', function () {
     describe('note', function () {
       before(function (done) {
         evernote.createNote(noteOptions, function (note) {
-          createdNote = note;
-          done();
+          evernote.getNote({guid: note.guid, withContent: true}, function (note) {
+            createdNote = note;
+            done();
+          });
         });
       });
 
@@ -53,6 +56,7 @@ describe('Evernote', function () {
         assert.deepEqual(createdNote.attributes.author, noteOptions.author);
         assert.deepEqual(createdNote.attributes.sourceURL, noteOptions.url);
         assert.deepEqual(createdNote.tagGuids.length, 3);
+        assert.deepEqual(/max-width:\d+px/.test(createdNote.content), true);
       });
     });
   });
@@ -126,28 +130,31 @@ describe('Evernote', function () {
         title: noteOptions.title,
         newTitle: 'update title',
         body: 'update note body.',
-        tag: ['update']
-      }
+        tag: ['update'],
+        width: '500px'
+      };
 
       before(function (done) {
         evernote.updateNote(options, function (note) {
-          updatedNote = note;
-          done();
+          evernote.getNote({guid: note.guid, withContent: true}, function (note) {
+            updatedNote = note;
+            done();
+          });
         });
       });
 
       it('should update note.', function () {
         assert.deepEqual(updatedNote.title, options.newTitle);
         assert.deepEqual(updatedNote.tagGuids.length, 1);
-        // 122 is ENML formant length.
-        assert.deepEqual(updatedNote.contentLength, 122 + options.body.length);
+        assert.deepEqual(/update note body/.test(updatedNote.content), true);
+        assert.deepEqual(/max-width:\d+px/.test(updatedNote.content), true);
       });
 
       after(function (done) {
         var options = {
           title: 'update title',
           newTitle: noteOptions.title
-        }
+        };
         evernote.updateNote(options, function (note) {
           done();
         });

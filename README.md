@@ -115,6 +115,13 @@ Type: `String`
 
 The original location where the resource was hosted.
 
+#### width
+
+Type: `String`  
+ex: `500px`
+
+Centering note contents by `width` value.
+
 #### callback(createdNote)
 
 Type: `Function`
@@ -263,7 +270,7 @@ Type: `String`
 
 Note title.
 
-#### newTitle
+##### newTitle
 
 Type: `String`
 
@@ -280,6 +287,13 @@ Note body.
 Type: `Array`
 
 List of the tag name.
+
+#### width
+
+Type: `String`  
+ex: `500px`
+
+Centering note contents by `width` value.
 
 #### callback(note)
 
