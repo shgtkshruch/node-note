@@ -250,6 +250,47 @@ Type: `Object`
 
 Return restored [note](https://dev.evernote.com/doc/reference/Types.html#Struct_Note).
 
+### evernote.updateNote(options, callback)
+
+Submit a set of changes to a note to the service.
+
+#### options
+
+##### title
+
+*Required*  
+Type: `String`
+
+Note title.
+
+#### newTitle
+
+Type: `String`
+
+New note title.
+
+##### body
+
+Type: `String`
+
+Note body.
+
+##### tag
+
+Type: `Array`
+
+List of the tag name.
+
+#### callback(note)
+
+Type: `Function`
+
+#### note
+
+Type: `Object`
+
+Return [the metadata (no contents)](https://dev.evernote.com/doc/reference/Types.html#Struct_Note) for the Note on the server after the update.
+
 ### evernote.expungeNote(guid, callback)
 
 Permanently removes a Note, and all of its Resources, from the service.

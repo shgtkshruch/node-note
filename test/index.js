@@ -41,7 +41,6 @@ describe('Evernote', function () {
     describe('note', function () {
       before(function (done) {
         evernote.createNote(noteOptions, function (note) {
-          console.log(note);
           createdNote = note;
           done();
         });
@@ -116,6 +115,42 @@ describe('Evernote', function () {
       it('should return notebook that matched the name.', function () {
         assert.deepEqual(notebook.guid, createdNotebook.guid);
         assert.deepEqual(notebook.name, createdNotebook.name);
+      });
+    });
+  });
+
+  describe('Update', function () {
+    describe('note', function () {
+      var updatedNote;
+      var options = {
+        title: noteOptions.title,
+        newTitle: 'update title',
+        body: 'update note body.',
+        tag: ['update']
+      }
+
+      before(function (done) {
+        evernote.updateNote(options, function (note) {
+          updatedNote = note;
+          done();
+        });
+      });
+
+      it('should update note.', function () {
+        assert.deepEqual(updatedNote.title, options.newTitle);
+        assert.deepEqual(updatedNote.tagGuids.length, 1);
+        // 122 is ENML formant length.
+        assert.deepEqual(updatedNote.contentLength, 122 + options.body.length);
+      });
+
+      after(function (done) {
+        var options = {
+          title: 'update title',
+          newTitle: noteOptions.title
+        }
+        evernote.updateNote(options, function (note) {
+          done();
+        });
       });
     });
   });

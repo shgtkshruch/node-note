@@ -249,6 +249,41 @@ evernote.prototype.getNotebook = function (options, callback) {
   });
 }
 
+evernote.prototype.updateNote = function (options, callback) {
+  if (!options.title) {
+    throw new Error('title required.');
+  }
+
+  var self = this;
+  var note = new Evernote.Note();
+
+  var newTitle = options.newTitle || '';
+
+  if (options.body) {
+    var content = '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note>'
+    content += options.body;
+    content += '</en-note>';
+    note.content = content;
+  }
+
+  if (options.tag) {
+    var tag = options.tag;
+    note.tagNames = tag;
+  }
+
+  this._getTitleGuid(options, function (title, guid) {
+    note.title = newTitle || title;
+    note.guid = guid;
+
+    self.noteStore.updateNote(note, function (err, note) {
+      if (err) {
+        throw err;
+      }
+      callback(note);
+    });
+  });
+}
+
 evernote.prototype._getTitleGuid = function (options, callback) {
   if (!options.title && !options.guid) {
     throw new Error("You shold set 'title' or 'guid'.");
