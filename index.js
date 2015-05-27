@@ -5,16 +5,8 @@ var crypto = require('crypto');
 var async = require('async');
 var mime = require('mime');
 
-function evernote (config) {
-  var options = {};
-
-  if (process.env.NODE_ENV === 'production') {
-    options.token = config.production.token;
-    options.sandbox = false;
-  } else {
-    options.token = config.develop.token;
-    options.sandbox = true;
-  }
+function evernote (options) {
+  var options = options || {};
 
   var client = new Evernote.Client({
     token: options.token,
