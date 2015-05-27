@@ -31,7 +31,7 @@ You need [Evernote API Key](https://dev.evernote.com/) and `config.json`, like t
 var config = require('./config.json');
 var nodeNote = require('node-note');
 
-var evernote = new nodeNote(config);
+var evernote = new nodeNote({token: config.develop.token, sandbox: true});
 
 // Create new note
 var options = {
@@ -54,12 +54,12 @@ evernote.deleteNote(options, function (deletedNote) {
 });
 ```
 
-If development environment, run command like this.  
+If development environment, run command like this.
 ```sh
 $ node index.js
 ```
 
-If production environment, run command like this.  
+If production environment, run command like this.
 ```sh
 $ NODE_ENV=production node index.js
 ```
@@ -74,7 +74,7 @@ Create new note.
 
 ##### title
 
-*Required*  
+*Required*
 Type: `String`
 
 Note title.
@@ -117,7 +117,7 @@ The original location where the resource was hosted.
 
 #### width
 
-Type: `String`  
+Type: `String`
 ex: `500px`
 
 Centering note contents by `width` value.
@@ -138,7 +138,7 @@ Delete note.
 
 #### options
 
-Required `title` or `guid` field.  
+Required `title` or `guid` field.
 If you can set both field, set both field.
 
 ##### title
@@ -199,7 +199,7 @@ Get note.
 
 ##### guid
 
-*Required*  
+*Required*
 Type: `String`
 
 The GUID of the note to be retrieved.
@@ -232,7 +232,7 @@ Restore note in trash.
 
 #### options
 
-Required `title` or `guid` field.  
+Required `title` or `guid` field.
 If you can set both field, set both field.
 
 ##### title
@@ -265,7 +265,7 @@ Submit a set of changes to a note to the service.
 
 ##### title
 
-*Required*  
+*Required*
 Type: `String`
 
 Note title.
@@ -290,7 +290,7 @@ List of the tag name.
 
 #### width
 
-Type: `String`  
+Type: `String`
 ex: `500px`
 
 Centering note contents by `width` value.
@@ -313,7 +313,7 @@ Permanently removes a Note, and all of its Resources, from the service.
 
 ##### guid
 
-*Required*  
+*Required*
 Type: `String`
 
 Note guid.
@@ -336,7 +336,7 @@ Create new notebook.
 
 ##### name
 
-*Required*  
+*Required*
 Type: `String`
 
 Notebook name.

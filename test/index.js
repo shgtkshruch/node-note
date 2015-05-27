@@ -22,7 +22,7 @@ describe('Evernote', function () {
       };
 
   before(function () {
-    evernote = new nodeNote(config);
+    evernote = new nodeNote({token: config.develop.token, sandbox: true});
   });
 
   describe('Create', function () {
