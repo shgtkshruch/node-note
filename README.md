@@ -54,16 +54,6 @@ evernote.deleteNote(options, function (deletedNote) {
 });
 ```
 
-If development environment, run command like this.
-```sh
-$ node index.js
-```
-
-If production environment, run command like this.
-```sh
-$ NODE_ENV=production node index.js
-```
-
 ## API
 
 ### evernote.createNote(options, callback)
